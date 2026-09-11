@@ -1445,7 +1445,127 @@ UserInputService.InputChanged:Connect(function(input)
         panelStart.Y.Offset + delta.Y
     )
 end)
+--==================================================
+-- JOHNONTOP LOADING SCREEN 👑
+--==================================================
 
+function api.LoadingScreen()
+    local loadingGui = Instance.new("ScreenGui")
+    loadingGui.Name = "JohnOnTopLoadingGUI"
+    loadingGui.ResetOnSpawn = false
+    loadingGui.IgnoreGuiInset = true
+    loadingGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    loadingGui.DisplayOrder = 999999999
+    loadingGui.Parent = playerGui
+
+    -- FULL SCREEN
+    local overlay = Instance.new("Frame")
+    overlay.Name = "Overlay"
+    overlay.Size = UDim2.fromScale(1, 1)
+    overlay.Position = UDim2.fromScale(0, 0)
+    overlay.BackgroundColor3 = Color3.fromRGB(8, 18, 35)
+    overlay.BorderSizePixel = 0
+    overlay.ZIndex = 200
+    overlay.Parent = loadingGui
+
+    -- TITLE
+    local title = Instance.new("TextLabel")
+    title.BackgroundTransparency = 1
+    title.Size = UDim2.fromOffset(500, 45)
+    title.Position = UDim2.new(0.5, -250, 0.5, -85)
+    title.Font = Enum.Font.GothamBold
+    title.Text = "JOHN ON TOP 👑"
+    title.TextColor3 = Color3.fromRGB(70, 200, 255)
+    title.TextSize = 28
+    title.TextXAlignment = Enum.TextXAlignment.Center
+    title.ZIndex = 201
+    title.Parent = overlay
+
+    -- LOADING STATUS
+    local loadingText = Instance.new("TextLabel")
+    loadingText.BackgroundTransparency = 1
+    loadingText.Size = UDim2.fromOffset(500, 25)
+    loadingText.Position = UDim2.new(0.5, -250, 0.5, -35)
+    loadingText.Font = Enum.Font.GothamMedium
+    loadingText.Text = "Starting..."
+    loadingText.TextColor3 = Color3.fromRGB(190, 220, 240)
+    loadingText.TextSize = 13
+    loadingText.TextXAlignment = Enum.TextXAlignment.Center
+    loadingText.ZIndex = 201
+    loadingText.Parent = overlay
+
+    -- PERCENT
+    local percent = Instance.new("TextLabel")
+    percent.BackgroundTransparency = 1
+    percent.Size = UDim2.fromOffset(500, 25)
+    percent.Position = UDim2.new(0.5, -250, 0.5, 0)
+    percent.Font = Enum.Font.GothamBold
+    percent.Text = "0%"
+    percent.TextColor3 = Color3.fromRGB(70, 200, 255)
+    percent.TextSize = 12
+    percent.TextXAlignment = Enum.TextXAlignment.Center
+    percent.ZIndex = 201
+    percent.Parent = overlay
+
+    -- BAR BACKGROUND
+    local barBackground = Instance.new("Frame")
+    barBackground.Name = "ProgressBackground"
+    barBackground.Size = UDim2.fromOffset(400, 12)
+    barBackground.Position = UDim2.new(0.5, -200, 0.5, 35)
+    barBackground.BackgroundColor3 = Color3.fromRGB(18, 35, 52)
+    barBackground.BorderSizePixel = 0
+    barBackground.ZIndex = 201
+    barBackground.Parent = overlay
+
+    local barCorner = Instance.new("UICorner")
+    barCorner.CornerRadius = UDim.new(1, 0)
+    barCorner.Parent = barBackground
+
+    -- BAR FILL
+    local barFill = Instance.new("Frame")
+    barFill.Name = "ProgressFill"
+    barFill.Size = UDim2.new(0, 0, 1, 0)
+    barFill.Position = UDim2.fromScale(0, 0)
+    barFill.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    barFill.BorderSizePixel = 0
+    barFill.ZIndex = 202
+    barFill.Parent = barBackground
+
+    local fillCorner = Instance.new("UICorner")
+    fillCorner.CornerRadius = UDim.new(1, 0)
+    fillCorner.Parent = barFill
+
+    -- LOADING STEPS
+    local steps = {
+        "Loading interface...",
+        "Checking player...",
+        "Loading object detector...",
+        "Loading egg detector...",
+        "Loading spawn system...",
+        "Starting auto return...",
+        "Ready!"
+    }
+
+    for index, step in ipairs(steps) do
+        local progress = index / #steps
+
+        loadingText.Text = step
+        percent.Text = math.floor(progress * 100) .. "%"
+        barFill.Size = UDim2.new(progress, 0, 1, 0)
+
+        task.wait(0.35)
+    end
+
+    task.wait(0.3)
+
+    -- REMOVE LOADING SCREEN
+    loadingGui:Destroy()
+end
+
+-- AUTOMATICALLY START
+task.spawn(function()
+    api.LoadingScreen()
+end)
 --==================================================
 -- JOHNONTOP CIRCLE ONLY
 --==================================================
